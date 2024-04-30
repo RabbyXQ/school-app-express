@@ -1,3 +1,4 @@
+const sessionMiddleware = require('../middlewares/sessionMiddleware');
 const userModel = require('../model/user');
 
 
@@ -37,17 +38,10 @@ async function signup(req, res) {
         return res.status(401).json({ error: 'Invalid email or password' });
       }
 
-      req.session.isAuth = true;
-
-      res.cookie('sessionId', req.sessionID, {
-        maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-        httpOnly: true, // Prevents client-side JavaScript access to the cookie
-        secure: false, // Set to true in production with HTTPS
-        sameSite: 'strict', // Prevents cross-site request forgery (CSRF) attacks
-      });
-
-      console.log(req.session);
-
+      req.session.userEmail = user.UserEmail;
+      req.session.userPass = user.UserPass;
+      req.session.sessionId = req.sessionID;
+      
       res.json({ success: true, user });
       console.log('User logged in successfully');
     } catch (error) {
@@ -64,8 +58,7 @@ async function signup(req, res) {
           console.error('Error destroying session:', err);
           return res.status(500).json({ error: 'Error logging out' });
         }
-        // Clear the session cookie
-        res.clearCookie('sessionId');
+        res.clearCookie('connect.sid');
         res.json({ success: true, message: 'Logout successful' });
         console.log('User logged out successfully');
       });

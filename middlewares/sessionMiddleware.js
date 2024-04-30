@@ -12,7 +12,12 @@ const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
   store: sessionStore,
-  cookie: { secure: true },
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+    httpOnly: true,
+    secure: false, // Set to true in production with HTTPS
+    sameSite: 'strict',
+  },
 });
 
 module.exports = sessionMiddleware;
