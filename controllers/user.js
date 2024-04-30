@@ -41,7 +41,7 @@ async function signup(req, res) {
       req.session.userEmail = user.UserEmail;
       req.session.userPass = user.UserPass;
       req.session.sessionId = req.sessionID;
-      
+
       res.json({ success: true, user });
       console.log('User logged in successfully');
     } catch (error) {
@@ -52,7 +52,6 @@ async function signup(req, res) {
 
   async function logout(req, res) {
     try {
-      // Clear the session
       req.session.destroy((err) => {
         if (err) {
           console.error('Error destroying session:', err);
