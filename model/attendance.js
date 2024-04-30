@@ -17,18 +17,17 @@ async function createAttendance(studentID, attendanceDate, status) {
   }
 }
 
-
-async function updateAttendance(attendanceID, studentID, attendanceDate, status) {
+async function getAttendanceBetweenDates(studentID, startDate, endDate) {
   const connection = await pool.getConnection();
   try {
-    const [result] = await connection.query(
-      'UPDATE Attendance SET StudentID=?, AttendanceDate=?, Status=? WHERE AttendanceID=?',
-      [studentID, attendanceDate, status, attendanceID]
+    const [rows] = await connection.query(
+      'SELECT * FROM Attendance WHERE StudentID=? AND AttendanceDate BETWEEN ? AND ?',
+      [studentID, startDate, endDate]
     );
     connection.release();
-    return result.affectedRows; 
+    return rows;
   } catch (error) {
-    console.error('Error updating attendance:', error);
+    console.error('Error fetching attendance between dates:', error);
     connection.release();
     throw error; 
   }
@@ -101,6 +100,26 @@ async function getAttendanceByDateStudentID(attendanceDate, studentID) {
   }
 }
 
+async function getAttendanceBetweenDatesByClass(classID, startDate, endDate) {
+  const connection = await pool.getConnection();
+  try {
+    const [rows] = await connection.query(
+      `SELECT a.*
+       FROM Attendance a
+       INNER JOIN Students s ON a.StudentID = s.StudentID
+       WHERE s.ClassID=? AND a.AttendanceDate BETWEEN ? AND ?`,
+      [classID, startDate, endDate]
+    );
+    connection.release();
+    return rows;
+  } catch (error) {
+    console.error('Error fetching attendance between dates by class:', error);
+    connection.release();
+    throw error; 
+  }
+}
+
+
 module.exports = {
   createAttendance,
   updateAttendance,
@@ -108,4 +127,5 @@ module.exports = {
   getAttendanceByStudentID,
   getAttendancesByStudentID,
   getAttendanceByDateStudentID,
+  getAttendanceBetweenDatesByClass
 };

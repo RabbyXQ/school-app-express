@@ -1,6 +1,35 @@
 const pool = require('../config/db');
 
+async function calculateGradeByMarks(mark) {
+  if (mark >= 80) {
+      return 5.00; // A+
+  } else if (mark >= 70) {
+      return 4.00; // A
+  } else if (mark >= 60) {
+      return 3.50; // A-
+  } else if (mark >= 50) {
+      return 3.00; // B
+  } else if (mark >= 40) {
+      return 2.00; // C
+  } else if (mark >= 33) {
+      return 1.00; // D
+  } else {
+      return 0.00; // F
+  }
+}
 
+function calculateCGPA(subjectGradePoints, credits) {
+  let totalGradePoints = 0;
+  let totalCredits = 0;
+
+  for (let i = 0; i < subjectGradePoints.length; i++) {
+      totalGradePoints += subjectGradePoints[i] * credits[i];
+      totalCredits += credits[i];
+  }
+
+  const cgpa = totalGradePoints / totalCredits;
+  return cgpa.toFixed(2); 
+}
 
 
 async function createGrade(studentID, subjectID, examID, marks, fullMarks, classID) {
@@ -38,6 +67,23 @@ async function updateGrade(gradeID, studentID, subjectID, examID, marks, fullMar
     throw error;
   }
 }
+
+async function deleteGradeByID(gradeID) {
+  const connection = await pool.getConnection();
+  try {
+    const [result] = await connection.query(
+      'DELETE FROM Grades WHERE GradeID=?',
+      [gradeID]
+    );
+    connection.release();
+    return result.affectedRows; // Return the number of affected rows (should be 1 if successful)
+  } catch (error) {
+    console.error('Error deleting Grade:', error);
+    connection.release();
+    throw error;
+  }
+}
+
 
 async function getMarkSheet(studentID, examID) {
   const connection = await pool.getConnection();
@@ -86,6 +132,35 @@ async function getGradesByClassAndExam(classID, examID) {
     throw error;
   }
 
+}
+
+async function getGradesByClassAndExamSubject(classID, examID, subjectID) {
+  const connection = await pool.getConnection();
+  try {
+    const [grades] = await connection.query(
+      'SELECT * FROM Grades WHERE ClassID=? AND ExamID=? AND SubjectID=?',
+      [classID, examID, subjectID]
+    );
+    connection.release();
+    return grades; // Return array of grades for the specified class, exam, and subject
+  } catch (error) {
+    console.error('Error getting grades:', error);
+    connection.release();
+    throw error;
+  }
+}
+
+
+module.exports = {
+  calculateCGPA,
+  calculateGradeByMarks,
+  createGrade,
+  updateGrade,
+  deleteGradeByID,
+  getMarkSheet,
+  getGradesByClassAndExam,
+  getGradesByClassAndSubject,
+  getGradesByClassAndExamSubject
 }
 
 
