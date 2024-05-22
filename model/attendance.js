@@ -89,5 +89,6 @@ module.exports = {
   createAttendance,
   deleteAttendance,
   getAttendanceByStudentID,
-  getFilteredAttendance
+  getFilteredAttendance,
+  updateAttendance
 };

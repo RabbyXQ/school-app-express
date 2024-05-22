@@ -36,23 +36,6 @@ async function updateStudent(studentID, firstName, lastName, dateOfBirth, gender
     }
 }
 
-// Get Students by Session
-async function getStudentsBySession(session) {
-    const connection = await pool.getConnection();
-    try {
-      const [rows] = await connection.query(
-        'SELECT * FROM Students WHERE Session = ?',
-        [session]
-      );
-      connection.release();
-      return rows;
-    } catch (error) {
-      console.error('Error getting Students by Session:', error);
-      connection.release();
-      throw error;
-    }
-}
-
 // Get Students by Session and Class ID
 async function getStudentsBySessionAndClass(session, classID) {
     const connection = await pool.getConnection();
@@ -106,11 +89,15 @@ async function deleteStudentByStudentID(studentID) {
 }
 
 
+async function getFilteredStudents(){
+
+}
+
 module.exports = {
     getStudentsBySession,
     createStudent,
     updateStudent,
     getStudentByStudentID,
-    getStudentsBySessionAndClass,
-    deleteStudentByStudentID
+    deleteStudentByStudentID,
+    getFilteredStudents
 };

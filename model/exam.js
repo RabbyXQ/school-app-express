@@ -51,9 +51,24 @@ async function createExam(examName, examDate, startTime, endTime) {
     }
   }
   
+  async function createExamRoutine(){
+
+  }
+
+  async function updateExamRoutine(){
+
+  }
+
+  async function deleteExamRoutine(){
+
+  }
+
   module.exports = {
     createExam,
     updateExam,
     deleteExam,
+    createExamRoutine,
+    updateExamRoutine,
+    deleteExamRoutine
   };
   

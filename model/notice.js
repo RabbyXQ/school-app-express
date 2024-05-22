@@ -1,7 +1,7 @@
 const pool = require('../config/db');
 
 // Create Notice
-async function createNotice(title, description, postedBy, expiryDate, isActive, thumbnail) {
+async function addNotice(title, description, postedBy, expiryDate, isActive, thumbnail) {
     const connection = await pool.getConnection();
     try {
       const [result] = await connection.query(
@@ -99,14 +99,32 @@ async function getNoticesByCreator(creatorID) {
     }
   }
   
+
+  async function addNoticeAttachment()
+  {
+
+  }
+
+  async function updateNoticeAttachment()
+  {
+
+  }
+
+  async function deleteNoticeAttachment()
+  {
+
+  }
   
   module.exports = {
-    createNotice,
+    addNotice,
     getNoticeByID,
     updateNotice,
     deleteNotice,
     getAllNotices,
-    getNoticesByCreator
+    getNoticesByCreator,
+    addNoticeAttachment,
+    updateNoticeAttachment,
+    deleteNoticeAttachment
   };
 
   

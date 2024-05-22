@@ -16,7 +16,7 @@ async function createSubject(subjectName, classID) {
     }
 }
 
-async function getSubjectByID(subjectID) {
+async function getSubject(subjectID) {
     const connection = await pool.getConnection();
     try {
         const [rows] = await connection.query(
@@ -64,9 +64,15 @@ async function deleteSubject(subjectID) {
     }
 }
 
+async function getSubjects()
+{
+
+}
+
 module.exports = {
     createSubject,
     updateSubject,
     deleteSubject,
-    getSubjectByID
+    getSubject,
+    getSubjects
 }

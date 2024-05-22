@@ -33,7 +33,7 @@ async function updateHead(headID, teacherID, speech, startsAt, endsAt) {
 }
 
 
-async function deleteHeadByID(headID) {
+async function deleteHead(headID) {
     const connection = await pool.getConnection();
     try {
         const [result] = await connection.query(

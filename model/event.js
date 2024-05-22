@@ -1,6 +1,7 @@
 const pool = require('../config/db');
 
-// Create Event
+
+
 async function createEvent(eventName, eventDate, description) {
     const connection = await pool.getConnection();
     try {
@@ -50,34 +51,28 @@ async function createEvent(eventName, eventDate, description) {
       throw error;
     }
   }
-  
- // Delete Events by IDs
-async function deleteEventsByIds(eventIDs) {
-    const connection = await pool.getConnection();
-    try {
-      // Create a comma-separated string of placeholders for the IDs
-      const placeholders = eventIDs.map(() => '?').join(',');
-      
-      // Construct the SQL query with the placeholders
-      const sql = `DELETE FROM Events WHERE EventID IN (${placeholders})`;
-      
-      // Execute the query with the array of IDs as parameters
-      const [result] = await connection.query(sql, eventIDs);
-      
-      connection.release();
-      return result.affectedRows;
-    } catch (error) {
-      console.error('Error deleting Events by IDs:', error);
-      connection.release();
-      throw error;
-    }
+
+  async function createEventAttachment(){
+
   }
+  
+  async function updateEventAttachment(){
+  
+  }
+  
+  async function deleteEventAttachment()
+  {
+    
+  }
+  
   
   module.exports = {
     createEvent,
     updateEvent,
     deleteEvent,
-    deleteEventsByIds,
+    createEventAttachment,
+    updateEventAttachment,
+    deleteEventAttachment
   };
 
   
