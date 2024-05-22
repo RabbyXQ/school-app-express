@@ -34,6 +34,18 @@ async function createClass(className, classTeacherID) {
     }
 }
 
+async function getClasses() {
+    const connection = await pool.getConnection();
+    try {
+        const [rows] = await connection.query('SELECT * FROM Classes');
+        connection.release();
+        return rows;
+    } catch (error) {
+        console.error('Error fetching classes:', error);
+        connection.release();
+        throw error;
+    }
+}
 
   async function deleteClass(classID) {
     const connection = await pool.getConnection();
@@ -66,6 +78,14 @@ async function updateClass(classID, className, classTeacherID) {
         connection.release();
         throw error; 
     }
+}
+
+module.exports = {
+    createClass,
+    updateClass,
+    deleteClass,
+    getClass,
+    getClasses
 }
 
 

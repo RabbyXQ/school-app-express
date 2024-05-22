@@ -12,9 +12,9 @@ async function markAttendance(req, res) {
 }
 
 async function updateAttendance(req, res) {
-  const {attendanceID} = req.body;
+  const {attendanceID, classID, subjectID, studentID, attendanceDate, status} = req.body;
   try {
-    const rowsAffected = await attendanceModel.updateAttendance(attendanceID);
+    const rowsAffected = await attendanceModel.updateAttendance(attendanceID, classID, subjectID, studentID, attendanceDate, status);
     if (rowsAffected > 0) {
       res.json({ message: 'Attendance deleted successfully' });
     } else {

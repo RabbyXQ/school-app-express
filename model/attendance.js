@@ -17,21 +17,22 @@ async function createAttendance(classID, subjectID, studentID, attendanceDate, s
 }
 
 
-async function deleteAttendance(attendanceID) {
+async function updateAttendance(attendanceID, classID, subjectID, studentID, attendanceDate, status) {
   const connection = await pool.getConnection();
   try {
     const [result] = await connection.query(
-      'DELETE FROM Attendance WHERE AttendanceID=?',
-      [attendanceID]
+      'UPDATE Attendance SET ClassID=?, SubjectID=?, StudentID=?, AttendanceDate=?, Status=? WHERE AttendanceID=?',
+      [classID, subjectID, studentID, attendanceDate, status, attendanceID]
     );
     connection.release();
     return result.affectedRows; 
   } catch (error) {
-    console.error('Error deleting attendance:', error);
+    console.error('Error updating attendance:', error);
     connection.release();
     throw error; 
   }
 }
+
 
 
 async function getAttendanceByStudentID(studentID, startDate, endDate) {
