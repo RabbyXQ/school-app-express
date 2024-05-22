@@ -1,33 +1,16 @@
 const pool = require('../config/db');
 
-
-async function createAttendance(studentID, attendanceDate, status) {
+async function createAttendance(classID, subjectID, studentID, attendanceDate, status) {
   const connection = await pool.getConnection();
   try {
     const [result] = await connection.query(
-      'INSERT INTO Attendance (StudentID, AttendanceDate, Status) VALUES (?, ?, ?)',
-      [studentID, attendanceDate, status]
+      'INSERT INTO Attendance (ClassID, SubjectID, StudentID, AttendanceDate, Status) VALUES (?, ?, ?, ?, ?)',
+      [classID, subjectID, studentID, attendanceDate, status]
     );
     connection.release();
     return result.insertId; 
   } catch (error) {
     console.error('Error creating attendance:', error);
-    connection.release();
-    throw error; 
-  }
-}
-
-async function getAttendanceBetweenDates(studentID, startDate, endDate) {
-  const connection = await pool.getConnection();
-  try {
-    const [rows] = await connection.query(
-      'SELECT * FROM Attendance WHERE StudentID=? AND AttendanceDate BETWEEN ? AND ?',
-      [studentID, startDate, endDate]
-    );
-    connection.release();
-    return rows;
-  } catch (error) {
-    console.error('Error fetching attendance between dates:', error);
     connection.release();
     throw error; 
   }
@@ -51,12 +34,12 @@ async function deleteAttendance(attendanceID) {
 }
 
 
-async function getAttendanceByStudentID(studentID) {
+async function getAttendanceByStudentID(studentID, startDate, endDate) {
   const connection = await pool.getConnection();
   try {
     const [rows] = await connection.query(
-      'SELECT * FROM Attendance WHERE StudentID=?',
-      [studentID]
+      'SELECT * FROM Attendance WHERE StudentID=? AND AttendanceDate BETWEEN ? AND ?',
+      [studentID, startDate, endDate]
     );
     connection.release();
     return rows; 
@@ -67,65 +50,43 @@ async function getAttendanceByStudentID(studentID) {
   }
 }
 
-async function getAttendancesByStudentID(studentID) {
+
+async function getFilteredAttendance(studentID, startDate, endDate, classID, subjectID, status) {
   const connection = await pool.getConnection();
-  try {
-    const [rows] = await connection.query(
-      'SELECT * FROM Attendance WHERE StudentID=?',
-      [studentID]
-    );
-    connection.release();
-    return rows;
-  } catch (error) {
-    console.error('Error fetching attendances by StudentID:', error);
-    connection.release();
-    throw error; 
+  let query = 'SELECT * FROM Attendance WHERE StudentID=?';
+  const queryParams = [studentID];
+
+  if (startDate && endDate) {
+    query += ' AND AttendanceDate BETWEEN ? AND ?';
+    queryParams.push(startDate, endDate);
   }
-}
+  if (classID) {
+    query += ' AND ClassID=?';
+    queryParams.push(classID);
+  }
+  if (subjectID) {
+    query += ' AND SubjectID=?';
+    queryParams.push(subjectID);
+  }
+  if (status) {
+    query += ' AND Status=?';
+    queryParams.push(status);
+  }
 
-
-async function getAttendanceByDateStudentID(attendanceDate, studentID) {
-  const connection = await pool.getConnection();
   try {
-    const [rows] = await connection.query(
-      'SELECT * FROM Attendance WHERE AttendanceDate=? AND StudentID=?',
-      [attendanceDate, studentID]
-    );
+    const [rows] = await connection.query(query, queryParams);
     connection.release();
     return rows; 
   } catch (error) {
-    console.error('Error fetching attendance by Date and StudentID:', error);
+    console.error('Error fetching filtered attendance:', error);
     connection.release();
     throw error; 
   }
 }
-
-async function getAttendanceBetweenDatesByClass(classID, startDate, endDate) {
-  const connection = await pool.getConnection();
-  try {
-    const [rows] = await connection.query(
-      `SELECT a.*
-       FROM Attendance a
-       INNER JOIN Students s ON a.StudentID = s.StudentID
-       WHERE s.ClassID=? AND a.AttendanceDate BETWEEN ? AND ?`,
-      [classID, startDate, endDate]
-    );
-    connection.release();
-    return rows;
-  } catch (error) {
-    console.error('Error fetching attendance between dates by class:', error);
-    connection.release();
-    throw error; 
-  }
-}
-
 
 module.exports = {
   createAttendance,
-  updateAttendance,
   deleteAttendance,
   getAttendanceByStudentID,
-  getAttendancesByStudentID,
-  getAttendanceByDateStudentID,
-  getAttendanceBetweenDatesByClass
+  getFilteredAttendance
 };

@@ -3,5 +3,8 @@ const router = express.Router();
 const attendanceController = require('../controllers/attendance');
 
 router.post('/mark', attendanceController.markAttendance);
-router.delete('/remove/:attendanceID', attendanceController.removeAttendance);
-router.get('/get/:attendanceID', attendanceController.getAttendance);
+router.delete('/unmark', attendanceController.removeAttendance);
+router.get('/get', attendanceController.getAttendance);
+
+
+module.exports = router;

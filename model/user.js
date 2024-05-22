@@ -10,6 +10,32 @@ async function createUser(email, pass, type) {
   return result.insertId; 
 }
 
+async function updateUser(newEmail, newPassword, newType, userId, oldEmail) {
+  const connection = await pool.getConnection();
+  try {
+    const [result] = await connection.query(
+      'UPDATE Users SET UserEmail = ?, UserPass = ?, Type = ?, ID = ? WHERE UserEmail = ?',
+      [newEmail, newPassword, newType, userId, oldEmail]
+    );
+    return result.affectedRows; // Return the number of affected rows
+  } finally {
+    connection.release();
+  }
+}
+
+async function deleteUser(email) {
+  const connection = await pool.getConnection();
+  try {
+    const [result] = await connection.query(
+      'DELETE FROM Users WHERE UserEmail = ?',
+      [email]
+    );
+    return result.affectedRows; // Return the number of affected rows
+  } finally {
+    connection.release();
+  }
+}
+
 async function getUserByEmail(email) {
   const connection = await pool.getConnection();
   const [rows] = await connection.query('SELECT * FROM Users WHERE UserEmail = ?', [email]);

@@ -41,6 +41,7 @@ async function signup(req, res) {
       req.session.userEmail = user.UserEmail;
       req.session.userPass = user.UserPass;
       req.session.sessionId = req.sessionID;
+      req.session.user = user;
 
       res.json({ success: true, user });
       console.log('User logged in successfully');
@@ -49,6 +50,7 @@ async function signup(req, res) {
       res.status(500).json({ error: 'Internal server error' });
     }
   }
+
 
   async function logout(req, res) {
     try {
@@ -67,6 +69,52 @@ async function signup(req, res) {
     }
   }
 
+  async function addUser(req, res){
 
+    const {email, pass, type } = req.body;
+    if (!email || !pass || !type) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }else
+    {
+      if(userModel.userExist){
+        return res.status(400).json({ error: 'User already exist' });
+      }
+    }
+    try {
+      const userId = await userModel.createUser(email, pass, type);
+      console.log('User inserted successfully');
+      res.json({ success: true, userId });
+    } catch (error) {
+      console.error('Error creating user:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
 
-module.exports = { signup, login, logout };
+  async function updateUser(req, res){
+
+    const {email, pass, type, id, old_email } = req.body;
+
+    try {
+      const userId = await userModel.updateUser(email, pass, type, id, old_email);
+      console.log('User Updated successfully');
+      res.json({ success: true, userId });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+  async function deleteUser(req, res){
+    const {email} = req.body;
+
+    try {
+      const userId = await userModel.deleteUser(email);
+      console.log('User Deleted successfully');
+      res.json({ success: true, userId });
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+module.exports = { signup, login, logout, addUser, updateUser, deleteUser };
