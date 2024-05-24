@@ -2,7 +2,7 @@ const pool = require('../config/db');
 
 
 
-async function createEvent(eventName, eventDate, description) {
+async function addEvent(eventName, eventDate, description) {
     const connection = await pool.getConnection();
     try {
       const [result] = await connection.query(
@@ -52,25 +52,63 @@ async function createEvent(eventName, eventDate, description) {
     }
   }
 
-  async function createEventAttachment(){
+// Add Event Attachment
+async function addEventAttachment(link, eventID, type) {
+  const connection = await pool.getConnection();
+  try {
+    const [result] = await connection.query(
+      'INSERT INTO EventAttachment (Link, EventID, Type) VALUES (?, ?, ?)',
+      [link, eventID, type]
+    );
+    connection.release();
+    return result.insertId;
+  } catch (error) {
+    console.error('Error creating EventAttachment:', error);
+    connection.release();
+    throw error;
+  }
+}
 
+// Update Event Attachment
+async function updateEventAttachment(id, link, eventID, type) {
+  const connection = await pool.getConnection();
+  try {
+    const [result] = await connection.query(
+      'UPDATE EventAttachment SET Link=?, EventID=?, Type=? WHERE ID=?',
+      [link, eventID, type, id]
+    );
+    connection.release();
+    return result.affectedRows;
+  } catch (error) {
+    console.error('Error updating EventAttachment:', error);
+    connection.release();
+    throw error;
   }
-  
-  async function updateEventAttachment(){
-  
+}
+
+// Delete Event Attachment
+async function deleteEventAttachment(id) {
+  const connection = await pool.getConnection();
+  try {
+    const [result] = await connection.query(
+      'DELETE FROM EventAttachment WHERE ID=?',
+      [id]
+    );
+    connection.release();
+    return result.affectedRows;
+  } catch (error) {
+    console.error('Error deleting EventAttachment:', error);
+    connection.release();
+    throw error;
   }
-  
-  async function deleteEventAttachment()
-  {
-    
-  }
+}
   
   
   module.exports = {
-    createEvent,
+    addEvent,
     updateEvent,
     deleteEvent,
-    createEventAttachment,
+    addEventAttachment,
     updateEventAttachment,
     deleteEventAttachment
   };

@@ -1,12 +1,12 @@
 const pool = require('../config/db')
 
 
-async function createClass(className, classTeacherID) {
+async function createClass(className) {
     const connection = await pool.getConnection();
     try {
         const [result] = await connection.query(
-            'INSERT INTO Classes (ClassName, ClassTeacherID) VALUES (?, ?)',
-            [className, classTeacherID]
+            'INSERT INTO Classes (ClassName) VALUES (?)',
+            [className]
         );
         connection.release();
         return result.insertId; 
@@ -64,11 +64,11 @@ async function getClasses() {
 }
 
 
-async function updateClass(classID, className, classTeacherID) {
+async function updateClass(classID, className) {
     const connection = await pool.getConnection();
     try {
         const [result] = await connection.query(
-            'UPDATE Classes SET ClassName=?, ClassTeacherID=? WHERE ClassID = ?',
+            'UPDATE Classes SET ClassName=? WHERE ClassID = ?',
             [className, classTeacherID, classID]
         );
         connection.release();

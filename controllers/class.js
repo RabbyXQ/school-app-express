@@ -1,9 +1,9 @@
 const classModel = require('../model/class');
 
 async function createClass(req, res) {
-    const { className, classTeacherID } = req.body;
+    const { className } = req.body;
     try {
-        const classID = await classModel.createClass(className, classTeacherID);
+        const classID = await classModel.createClass(className);
         res.status(201).json({ message: 'Class created successfully', classID });
     } catch (error) {
         console.error('Error creating class:', error);
@@ -12,9 +12,9 @@ async function createClass(req, res) {
 }
 
 async function updateClass(req, res) {
-    const { classID, className, classTeacherID } = req.body;
+    const { classID, className } = req.body;
     try {
-        const affectedRows = await classModel.updateClass(classID, className, classTeacherID);
+        const affectedRows = await classModel.updateClass(classID, className);
         if (affectedRows > 0) {
             res.status(200).json({ message: 'Class updated successfully' });
         } else {
