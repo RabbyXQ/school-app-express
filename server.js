@@ -10,6 +10,7 @@ const dashboardRoutes = require('./routes/dashboard');
 const attendanceRoutes = require('./routes/attendance');
 const schoolInfoRoutes = require('./routes/schoolInfoRoutes');
 const menuRoutes = require("./routes/menuRoutes");
+const pageRoutes = require("./routes/pageRoutes");
 const cors = require('cors');
 
 const app = express();
@@ -33,6 +34,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(schoolInfoRoutes);
 app.use(dashboardRoutes);
 app.use('/menus', menuRoutes);
+app.use('/pages', pageRoutes);
 
 app.get('/', (req, res) => {
   res.send('Visit, bhbss.com');

@@ -52,6 +52,28 @@ const createTableIfNotExists = async () => {
     `;
     await connection.query(createMenuSectionTableSQL);
 
+    const createPageTable  = `
+      CREATE TABLE IF NOT EXISTS pages (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      slug VARCHAR(255) NOT NULL UNIQUE,
+      content TEXT NOT NULL
+    );
+    `;
+    await connection.query(createPageTable);
+
+    const createPageFilesTable = `
+    
+    CREATE TABLE IF NOT EXISTS page_files (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      page_id INT NOT NULL,
+      link varchar(255) NOT NULL
+    );
+
+    `;
+    
+    await connection.query(createPageFilesTable);
+
     console.log('Tables created successfully.');
   } catch (error) {
     console.error('Error creating tables:', error.message);

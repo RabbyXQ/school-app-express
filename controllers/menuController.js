@@ -31,9 +31,9 @@ const getClassById = async (req, res) => {
 };
 
 const createClass = async (req, res) => {
-  const { name, menuType } = req.body;
+  const { name, menu_type } = req.body;
   try {
-    const id = await models.createClass(name, menuType);
+    const id = await models.createClass(name, menu_type);
     res.status(201).json({ id });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -42,15 +42,29 @@ const createClass = async (req, res) => {
 
 const updateClass = async (req, res) => {
   const id = parseInt(req.params.id, 10);
-  const { name, menuType } = req.body;
+  const { name, menu_type } = req.body;
   try {
-    const affectedRows = await models.updateClass(id, name, menuType);
+    const affectedRows = await models.updateClass(id, name, menu_type);
     if (affectedRows === 0) return res.status(404).json({ message: 'Class not found' });
     res.json({ message: 'Class updated successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+const updateSection = async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const { name, classId, type, value } = req.body;
+  try {
+    const affectedRows = await models.updateSection(id, name, classId, type, value);
+    if (affectedRows === 0) return res.status(404).json({ message: 'Section not found' });
+    res.json({ message: 'Section updated successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
 
 const deleteClass = async (req, res) => {
   const id = parseInt(req.params.id, 10);
@@ -104,5 +118,6 @@ module.exports = {
   getSectionsByClassId,
   createSection,
   deleteSection,
-  getAllSectionsGroupedByType
+  getAllSectionsGroupedByType,
+  updateSection
 };

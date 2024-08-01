@@ -11,8 +11,9 @@ router.delete('/classes/:id', controllers.deleteClass);
 
 // Routes for Menu Section
 router.get('/classes/:classId/sections', controllers.getSectionsByClassId);
-router.post('/sections', controllers.createSection);
-router.delete('/sections/:id', controllers.deleteSection);
+router.post('/classes/sections', controllers.createSection);
+router.put('/classes/sections/:id', controllers.updateSection);
+router.delete('/classes/sections/:id', controllers.deleteSection);
 
 // Route for All Sections Grouped by Type
 router.get('/sections/grouped', controllers.getAllSectionsGroupedByType);

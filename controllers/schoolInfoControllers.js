@@ -19,7 +19,6 @@ const uploadLogo = async(req, res) => {
             res.json({ status: true, url: uploadResult.url });
         }
     }catch(error){
-        console.error('Error Uploading Logo:', error);  
         res.status(500).json({ message: 'Failed To Upload Logo' });
     }
 }

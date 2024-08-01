@@ -37,6 +37,21 @@ const updateClass = async (id, name, menuType) => {
   }
 };
 
+
+const updateSection = async (id, name, classId, type, value) => {
+  try {
+    // Ensure id is included in the query
+    const [results] = await pool.query(
+      'UPDATE menu_section SET name = ?, class_id = ?, type = ?, value = ? WHERE id = ?',
+      [name, classId, type, value, id]
+    );
+    return results.affectedRows;
+  } catch (error) {
+    throw new Error(`Error updating section: ${error.message}`);
+  }
+};
+
+
 const deleteClass = async (id) => {
   try {
     const [results] = await pool.query('DELETE FROM menu_class WHERE id = ?', [id]);
@@ -83,6 +98,7 @@ const getAllSectionsGroupedByType = async () => {
           mc.name AS menu_name,
           ms.id AS section_id,
           ms.name AS section_name,
+          ms.type as section_type,
           ms.value AS section_value
         FROM 
           menu_class mc
@@ -105,6 +121,7 @@ const getAllSectionsGroupedByType = async () => {
           if (row.section_id) {
             menu.sections.push({
               section_id: row.section_id,
+              section_type: row.section_type,
               section_name: row.section_name,
               section_value: row.section_value,
             });
@@ -115,6 +132,7 @@ const getAllSectionsGroupedByType = async () => {
             menu_name: row.menu_name,
             sections: row.section_id ? [{
               section_id: row.section_id,
+              section_type: row.section_type,
               section_name: row.section_name,
               section_value: row.section_value,
             }] : [],
@@ -151,5 +169,6 @@ module.exports = {
   getSectionsByClassId,
   createSection,
   deleteSection,
-  getAllSectionsGroupedByType
+  getAllSectionsGroupedByType,
+  updateSection
 };
