@@ -62,17 +62,15 @@ const createTableIfNotExists = async () => {
     `;
     await connection.query(createPageTable);
 
-    const createPageFilesTable = `
-    
-    CREATE TABLE IF NOT EXISTS page_files (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      page_id INT NOT NULL,
-      link varchar(255) NOT NULL
-    );
-
+    const createNoticeTable = `
+      CREATE TABLE IF NOT EXISTS notices(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title varchar(255) NOT NULL,
+        content TEXT NOT NULL
+      );  
     `;
-    
-    await connection.query(createPageFilesTable);
+
+    await connection.query(createNoticeTable);
 
     console.log('Tables created successfully.');
   } catch (error) {
