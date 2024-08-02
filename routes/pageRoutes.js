@@ -24,6 +24,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post('/upload', upload.single('file'), handleUploadFile);
+
 router.post('/add', handleAddPage);
 router.put('/update/:id', handleUpdatePage);
 router.delete('/delete/:id', handleDeletePage);

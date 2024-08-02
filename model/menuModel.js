@@ -3,7 +3,7 @@ const pool = require('../config/db'); // Ensure this uses mysql2/promise
 // Model for Menu Class
 const getAllClasses = async () => {
   try {
-    const [results] = await pool.query('SELECT * FROM menu_class');
+    const [results] = await pool.query('SELECT * FROM menu_class ORDER BY id DESC');
     return results;
   } catch (err) {
     throw new Error(`Error fetching classes: ${err.message}`);
@@ -12,7 +12,7 @@ const getAllClasses = async () => {
 
 const getClassById = async (id) => {
   try {
-    const [results] = await pool.query('SELECT * FROM menu_class WHERE id = ?', [id]);
+    const [results] = await pool.query('SELECT * FROM menu_class WHERE id = ? ORDER BY id DESC', [id]);
     return results[0];
   } catch (err) {
     throw new Error(`Error fetching class: ${err.message}`);

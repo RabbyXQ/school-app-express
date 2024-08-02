@@ -11,20 +11,24 @@ const createTableIfNotExists = async () => {
   const connection = await pool.getConnection();
   
   try {
-    // Create school_info table if it doesn't exist
+
     const createSchoolInfoTableSQL = `
       CREATE TABLE IF NOT EXISTS school_info (
         id INT AUTO_INCREMENT PRIMARY KEY,
         site_name VARCHAR(255) NOT NULL,
         description TEXT,
+        long_description TEXT,
         email VARCHAR(255) NOT NULL UNIQUE,
         phone VARCHAR(20),
         address TEXT,
         logo VARCHAR(255),
+        image VARCHAR(255),
         facebook VARCHAR(255),
         twitter VARCHAR(255),
         instagram VARCHAR(255),
-        linkedin VARCHAR(255)
+        linkedin VARCHAR(255),
+        brief_section VARCHAR(255),
+        slider_gallery INT
       );
     `;
     await connection.query(createSchoolInfoTableSQL);
@@ -39,7 +43,6 @@ const createTableIfNotExists = async () => {
     `;
     await connection.query(createMenuClassTableSQL);
 
-    // Create menu_section table if it doesn't exist
     const createMenuSectionTableSQL = `
       CREATE TABLE IF NOT EXISTS menu_section (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -65,12 +68,76 @@ const createTableIfNotExists = async () => {
     const createNoticeTable = `
       CREATE TABLE IF NOT EXISTS notices(
         id INT AUTO_INCREMENT PRIMARY KEY,
-        title varchar(255) NOT NULL,
+        title VARCHAR(255) NOT NULL,
         content TEXT NOT NULL
       );  
     `;
 
     await connection.query(createNoticeTable);
+
+    const createNewsTable =`
+      CREATE TABLE IF NOT EXISTS news(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        news_date DATE DEFAULT CURRENT_DATE,
+        content TEXT NOT NULL
+      );
+    `;
+
+    await connection.query(createNewsTable);
+
+    const createEventTable = `
+      CREATE TABLE IF NOT EXISTS events(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        gallery_id INT, 
+        event_date DATE DEFAULT CURRENT_DATE,
+        content TEXT NOT NULL
+      )
+    `
+
+    await connection.query(createEventTable);
+
+    const createHeadTable = `
+      CREATE TABLE IF NOT EXISTS patron(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        type VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        content TEXT NOT NULL 
+      );
+    `;
+
+    await connection.query(createHeadTable);
+
+
+    const createGalleryCat = `
+    CREATE TABLE IF NOT EXISTS gallery_cat(
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255)
+    );
+    `;
+
+    await connection.query(createGalleryCat);
+
+    const createGallery = `
+      CREATE TABLE IF NOT EXISTS gallery_item(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        gallery_id INT NOT NULL,
+        image VARCHAR(255)
+      );
+    `;
+
+    await connection.query(createGallery);
+
+    const createEventsTable = `
+      CREATE TABLE IF NOT EXISTS events(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        gallery_id INT,
+        content TEXT
+      )
+    `;
+
+    await connection.query(createEventsTable);
 
     console.log('Tables created successfully.');
   } catch (error) {

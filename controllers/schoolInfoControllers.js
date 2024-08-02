@@ -28,14 +28,18 @@ const updateSchoolInfo = async (req, res) => {
         const info = {
             siteName: req.body.site_name,
             description: req.body.description,
+            long_description: req.body.long_description,
             email: req.body.email,
             phone: req.body.phone,
             address: req.body.address,
             logo: req.body.logo,
+            image: req.body.image,
             facebook: req.body.facebook,
             twitter: req.body.twitter,
             instagram: req.body.instagram,
             linkedin: req.body.linkedin,
+            brief_section: req.body.brief_section,
+            slider_gallery: req.body.slider_gallery
         };
 
         await schoolInfoModel.updateSchoolInfo(info);

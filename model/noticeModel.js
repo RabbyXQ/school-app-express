@@ -56,7 +56,7 @@ const getAllNotices = async (page = 1, limit = 10) => {
   const offset = (page - 1) * limit; 
   try {
     const [rows] = await connection.query('SELECT id, title FROM notices ORDER BY id DESC LIMIT ? OFFSET ? ', [limit, offset]);
-    const [countResult] = await connection.query('SELECT COUNT(*) as count FROM pages');
+    const [countResult] = await connection.query('SELECT COUNT(*) as count FROM notices');
     const totalItems = countResult[0].count;
     return {
       totalItems,

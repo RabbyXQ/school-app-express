@@ -12,6 +12,10 @@ const schoolInfoRoutes = require('./routes/schoolInfoRoutes');
 const menuRoutes = require("./routes/menuRoutes");
 const pageRoutes = require("./routes/pageRoutes");
 const noticesRoutes = require("./routes/noticeRoutes");
+const newsRoutes = require("./routes/newsRoutes");
+const eventRoutes = require("./routes/eventRoutes");
+const patronRoutes = require("./routes/patronRoutes");
+const galleryRoutes = require("./routes/galleryRoutes");
 
 const cors = require('cors');
 
@@ -21,14 +25,9 @@ const port = 4000;
 app.use(sessionMiddleware);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors()); // Allow all origins by default
+app.use(cors()); 
 
-// Optionally, configure CORS options
-// const corsOptions = {
-//   origin: 'http://localhost:3000', // Replace with your frontend origin
-// };
 
-// Define your routes
 app.use('/users', userRoutes);
 app.use('/attendance', requireLogin, attendanceRoutes);
 app.use(express.static(path.join(__dirname, 'public')));
@@ -37,11 +36,18 @@ app.use(schoolInfoRoutes);
 app.use(dashboardRoutes);
 app.use('/menus', menuRoutes);
 app.use('/pages', pageRoutes);
+app.use(newsRoutes);
+app.use(eventRoutes);
+app.use(patronRoutes);
+app.use(galleryRoutes)
 app.use(noticesRoutes);
 app.get('/', (req, res) => {
   res.send('Visit, bhbss.com');
 });
-// Start the server
+
+
+
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

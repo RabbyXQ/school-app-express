@@ -42,7 +42,7 @@ const getPage = async (id) => {
 
 const getPageBySlug = async (slug) => {
   try {
-    const [rows] = await connection.query('SELECT * FROM pages WHERE slug = ?', [slug]);
+    const [rows] = await connection.query('SELECT * FROM pages WHERE slug = ? ORDER BY id DESC', [slug]);
     return rows[0];
   } catch (error) {
     console.error('Error getting page by slug:', error);
@@ -53,7 +53,7 @@ const getPageBySlug = async (slug) => {
 const getAllPages = async (page = 1, limit = 10) => {
   try {
     const offset = (page - 1) * limit;
-    const [rows] = await connection.query('SELECT * FROM pages LIMIT ? OFFSET ?', [limit, offset]);
+    const [rows] = await connection.query('SELECT * FROM pages ORDER BY id DESC LIMIT ? OFFSET ?', [limit, offset]);
     const [countResult] = await connection.query('SELECT COUNT(*) as count FROM pages');
     const totalItems = countResult[0].count;
     return {
