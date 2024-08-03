@@ -129,15 +129,77 @@ const createTableIfNotExists = async () => {
 
     await connection.query(createGallery);
 
-    const createEventsTable = `
-      CREATE TABLE IF NOT EXISTS events(
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        gallery_id INT,
-        content TEXT
-      )
+    const createClassTable = `
+    CREATE TABLE IF NOT EXISTS classes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+    );
     `;
 
-    await connection.query(createEventsTable);
+    await connection.query(createClassTable);
+
+
+    const createSectionTable = `
+      CREATE TABLE IF NOT EXISTS sections(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        class_id INT NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        shift VARCHAR(255) NOT NULL
+      );
+    `;
+
+    await connection.query(createSectionTable);
+
+    const createTableSubjects = `
+      CREATE TABLE IF NOT EXISTS subjects(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255)
+      );
+    `;
+
+    await connection.query(createTableSubjects);
+
+    const createSyllabusTable = `
+      CREATE TABLE IF NOT EXISTS syllabus(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        class_id INT NOT NULL,
+        year VARCHAR(255),
+        page_slug VARCHAR(255)
+      );
+    
+    `;
+
+    await connection.query(createSyllabusTable);
+
+    const createRoutineTable = `
+      CREATE TABLE IF NOT EXISTS routines (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      day VARCHAR(20) NOT NULL,
+      subject VARCHAR(100) NOT NULL,
+      time_From TIME NOT NULL,
+      time_To TIME NOT NULL,
+      class_id INT NOT NULL,
+      section_id INT NOT NULL,
+      UNIQUE KEY unique_routine (day, time_from, class_id, section_id)
+      );
+    `;
+
+    await connection.query(createRoutineTable);
+
+    const createEmployeeTable = `
+      CREATE TABLE IF NOT EXISTS employees(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        type VARCHAR(255),
+        active INT NOT NULL,
+        name VARCHAR(255),
+        phone VARCHAR(255),
+        email VARCHAR(255),
+        photo VARCHAR(255)
+      );
+    `
+    await connection.query(createEmployeeTable);
+
+
 
     console.log('Tables created successfully.');
   } catch (error) {

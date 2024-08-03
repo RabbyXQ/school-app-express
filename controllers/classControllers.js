@@ -1,10 +1,10 @@
-const classModel = require('../model/class');
+const classModel = require('../model/classModel');
 
 async function createClass(req, res) {
-    const { className } = req.body;
+    const { name } = req.body;
     try {
-        const classID = await classModel.createClass(className);
-        res.status(201).json({ message: 'Class created successfully', classID });
+        const id = await classModel.createClass(name);
+        res.status(201).json({ message: 'Class created successfully', id });
     } catch (error) {
         console.error('Error creating class:', error);
         res.status(500).json({ message: 'Failed to create class' });
@@ -12,9 +12,9 @@ async function createClass(req, res) {
 }
 
 async function updateClass(req, res) {
-    const { classID, className } = req.body;
+    const { id, name } = req.body;
     try {
-        const affectedRows = await classModel.updateClass(classID, className);
+        const affectedRows = await classModel.updateClass(id, name);
         if (affectedRows > 0) {
             res.status(200).json({ message: 'Class updated successfully' });
         } else {
@@ -27,9 +27,9 @@ async function updateClass(req, res) {
 }
 
 async function deleteClass(req, res) {
-    const { classID } = req.body;
+    const { id } = req.body;
     try {
-        const affectedRows = await classModel.deleteClass(classID);
+        const affectedRows = await classModel.deleteClass(id);
         if (affectedRows > 0) {
             res.status(200).json({ message: 'Class deleted successfully' });
         } else {
@@ -42,9 +42,9 @@ async function deleteClass(req, res) {
 }
 
 async function getClass(req, res) {
-    const { classID } = req.params; // Assuming classID is passed as a URL parameter
+    const { id } = req.params; // Assuming classID is passed as a URL parameter
     try {
-        const classData = await classModel.getClass(classID);
+        const classData = await classModel.getClass(id);
         if (classData) {
             res.status(200).json(classData); // Sending the retrieved class data as a JSON response
         } else {
@@ -58,7 +58,7 @@ async function getClass(req, res) {
 
 async function getClasses(req, res) {
     try {
-        const classes = await getClassesModel();
+        const classes = await classModel.getClasses();
         res.status(200).json(classes);
     } catch (error) {
         console.error('Error fetching classes:', error);
