@@ -119,6 +119,15 @@ const createTableIfNotExists = async () => {
 
     await connection.query(createGalleryCat);
 
+    const createFilesCat = `
+    CREATE TABLE IF NOT EXISTS folder_cat(
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255)
+    );
+    `;
+
+    await connection.query(createFilesCat);
+
     const createGallery = `
       CREATE TABLE IF NOT EXISTS gallery_item(
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -128,6 +137,16 @@ const createTableIfNotExists = async () => {
     `;
 
     await connection.query(createGallery);
+
+    const createFile = `
+      CREATE TABLE IF NOT EXISTS folder_item(
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        folder_id INT NOT NULL,
+        file VARCHAR(255)
+      );
+    `;
+
+    await connection.query(createFile);
 
     const createClassTable = `
     CREATE TABLE IF NOT EXISTS classes (
@@ -200,6 +219,82 @@ const createTableIfNotExists = async () => {
     await connection.query(createEmployeeTable);
 
 
+      const createStudentTable = `
+      CREATE TABLE IF NOT EXISTS students (
+      serial_id INT AUTO_INCREMENT PRIMARY KEY,
+      student_id INT NOT NULL,
+      admission_id INT NOT NULL,
+      student_name_bn VARCHAR(255) NOT NULL,
+      student_name_en VARCHAR(255) NOT NULL,
+      brid VARCHAR(20) NOT NULL UNIQUE,
+      date_of_birth DATE NOT NULL,
+      gender VARCHAR(10) NOT NULL,
+      religion VARCHAR(50),
+      disability_status VARCHAR(50),
+      student_mobile_no VARCHAR(15),
+      father_name_en VARCHAR(255) NOT NULL,
+      father_name_bn VARCHAR(255) NOT NULL,
+      father_mobile_no VARCHAR(15) NOT NULL,
+      mother_name_en VARCHAR(255) NOT NULL,
+      mother_name_bn VARCHAR(255) NOT NULL,
+      mother_mobile_no VARCHAR(15) NOT NULL,
+      guardian_name_en VARCHAR(255),
+      guardian_name_bn VARCHAR(255),
+      guardian_mobile_no VARCHAR(15),
+      class VARCHAR(10) NOT NULL,
+      section VARCHAR(10) NOT NULL,
+      dept VARCHAR(20)
+      );
+    `;
+
+
+    await connection.query(createStudentTable);
+
+
+    const createAdmissionTable = `
+      CREATE TABLE IF NOT EXISTS admissions (
+      id SERIAL PRIMARY KEY,
+      student_name_bn VARCHAR(255) NOT NULL,
+      student_name_en VARCHAR(255) NOT NULL,
+      father_name_bn VARCHAR(255) NOT NULL,
+      father_name_en VARCHAR(255) NOT NULL,
+      father_mobile_no VARCHAR(15) NOT NULL,
+      mother_name_bn VARCHAR(255) NOT NULL,
+      mother_name_en VARCHAR(255) NOT NULL,
+      mother_mobile_no VARCHAR(15) NOT NULL,
+      guardian_name_en VARCHAR(255),
+      guardian_name_bn VARCHAR(255),
+      guardian_mobile_no VARCHAR(15),
+      brid VARCHAR(20) NOT NULL UNIQUE,
+      date_of_birth DATE NOT NULL,
+      gender VARCHAR(10) NOT NULL,
+      religion VARCHAR(50),
+      disability_status VARCHAR(50),
+      student_mobile_no VARCHAR(15),
+      blood_group VARCHAR(5),
+      desired_class VARCHAR(50) NOT NULL,
+      previous_school VARCHAR(255),
+      permanent_address_village VARCHAR(255),
+      permanent_address_post_office VARCHAR(255),
+      permanent_address_upazila VARCHAR(255),
+      permanent_address_district VARCHAR(255),
+      current_address_village VARCHAR(255),
+      current_address_post_office VARCHAR(255),
+      current_address_upazila VARCHAR(255),
+      current_address_district VARCHAR(255),
+      desired_study VARCHAR(255),
+      desired_grade_for_admission VARCHAR(50),
+      previous_grade_certificate VARCHAR(255),
+      birth_certificate VARCHAR(255),
+      parents_id_card VARCHAR(255),
+      student_photo VARCHAR(255),
+      status BOOLEAN DEFAULT FALSE,
+      session VARCHAR(50)
+  );
+
+    `;
+
+    await connection.query(createAdmissionTable);
 
     console.log('Tables created successfully.');
   } catch (error) {
