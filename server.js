@@ -22,14 +22,17 @@ const routineRoutes = require("./routes/routineRoutes");
 const employeeRoutes = require("./routes/employeeRoutes");
 const sectionRoutes = require("./routes/sectionRoutes");
 const subjectRoutes = require("./routes/subjectRoutes");
+const folderRoutes = require("./routes/folderRoutes");
+const admissionRoutes = require("./routes/admissionRoutes");
+const studentRoutes = require("./routes/studentRoutes");
 const cors = require('cors');
 const https = require('https');
 const app = express();
 const port = 4000;
 
-const privateKey = fs.readFileSync(path.join(__dirname, 'certs', 'privatekey.pem'), 'utf8');
-const certificate = fs.readFileSync(path.join(__dirname, 'certs', 'certificate.pem'), 'utf8');
-const credentials = { key: privateKey, cert: certificate };
+// const privateKey = fs.readFileSync(path.join(__dirname, 'certs', 'privatekey.pem'), 'utf8');
+// const certificate = fs.readFileSync(path.join(__dirname, 'certs', 'certificate.pem'), 'utf8');
+// const credentials = { key: privateKey, cert: certificate };
 
 
 
@@ -61,8 +64,9 @@ app.use(employeeRoutes);
 app.use(sectionRoutes);
 app.use(sectionRoutes);
 app.use(subjectRoutes);
-
-
+app.use(folderRoutes);
+app.use(admissionRoutes);
+app.use(studentRoutes);
 
 app.get('/', (req, res) => {
   res.send('Visit, bhbss.com');
